@@ -1,0 +1,20 @@
+noPerm: '&cYou do not have permission!'
+notRegistered: '&c Is not a registered food item!'
+pleaseEnterItem: '&cPlease Enter a Fooditem!'
+unrecognizedCommand: '&cUnrecognized command, do /cf for a list of commands'
+CoreCommandShowHelp: |
+  &fShow help menu
+CoreCommandGive: |
+  &fGives you a custom fooditem
+CoreCommandReload: |
+  &fReloads the plugin
+CoreCommandCreate: |
+  &fCreates a Custom food out of the food you're holding
+GiveCommandGivingItem: '&aGiving you Fooditem '
+ReloadCommandReloading: '&aReloading Miden''s Foods...'
+ReloadCommandLag: '&aBe warned, this will cause a few seconds of lag!'
+ReloadCommandFinished: '&aMiden''s Foods has been reloaded!'
+CreateCommandNoArgs: '&cYou must enter a hunger fill amount and a saturation fill amount!'
+CreateCommandNoItem: '&cYou must be holding an item!'
+InvalidArgs: '&cInvalid arguements! You might be putting in a letter where a number is needed!'
+FoodCreated: '&aYour food has been created! Check the config to adjust the item and set its recipe!'

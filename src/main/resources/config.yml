@@ -1,0 +1,151 @@
+LegacySystem: false
+#This is enabled by default (whether set to true OR false) if your server is running 1.13 or under!
+#Set this option to TRUE if you want to use the Legacy hunger system!
+#Note that the ID system is MUCH more efficient than the old system!
+#SMOKER AND CAMPFIRE RECIPES WILL NOT WORK WHEN USING THE LEGACY SYSTEM!
+#When using the legacy system, you will not be able to use custom foods in other foods' recipes, unless using a 3rd party crafting plugin.
+
+Recipes:
+  #EXAMPLES:
+  Toast:
+    Name: "&6Toast"
+    #Name of the food (what the item will show up as)
+    Type: "Furnace"
+    #Furnace or crafting table? Write Furnace for furnace and Table for crafting table. Smoker not yet supported
+    Lore: "&bmmm... toasty"
+    #The lore of the item, only one string supported for now
+    Recipe:
+      Ingredient: "BREAD"
+      #The item going into the furnace
+      Cook-Time: 100
+      #How long, in ticks, the food will take to cook
+      Experience: 30
+      #Amount of experience rewarded for cooking
+    Base: "BREAD"
+    #What the new food will appear as in your hand, can be changed via resource pack. See foodvalues.yml for all supported base items
+    Hunger-Fill: 6
+    #How much hunger it will fill. 1 = half a hunger bar 20 = full hunger.
+    Saturation: 5
+    #How much saturation it will restore. same formula as hunger fill.
+    Id: 1
+    #Tells my plugin what food you're eating!
+    #Also allows for Custom Models with a resource pack.
+    #This MUST be unique for every different food!
+
+  BaconBurger:
+    Name: "&6Bacon Burger"
+    Type: "Shaped"
+    Lore: "&bTasty Burger"
+    Recipe:
+      TableLine1: " B "
+      TableLine2: "KMS"
+      TableLine3: " B "
+      #The shape of the recipe in the crafting table. Put a letter for an item and a space to leave it blank. MUST HAVE 3 CHARACTERS IN EACH!
+      LetterKeys:
+        B: "BREAD"
+        K: "DRIED_KELP"
+        M: "COOKED_BEEF"
+        S: "CFD-Bacon"
+      #What materials the letters in the recipe are representing.
+    Base: "COOKED_BEEF"
+    Hunger-Fill: 10
+    Saturation: 15
+    Id: 2
+#Incompatible with 1.13!
+
+  Chocolatebar:
+    Name: "&6Chocolate Bar"
+    Type: "Shaped"
+    Lore: "&bmmmm... chocolatey"
+    Recipe:
+      TableLine1: "   "
+      TableLine2: "CMC"
+      TableLine3: "CCC"
+      LetterKeys:
+        C: "COCOA_BEANS"
+        M: "MILK_BUCKET"
+    Base: "DRIED_KELP"
+    Hunger-Fill: 3
+    Saturation: 3
+    Id: 3
+
+  Bakedapple:
+    Name: "&6Baked Apple"
+    Type: "Furnace"
+    Lore: "&bAn apple and an open flame makes for a succulent treat"
+    Recipe:
+      Ingredient: "APPLE"
+      Cook-Time: 55
+      Experience: 40
+    Base: "APPLE"
+    Hunger-Fill: 5
+    Saturation: 4
+    Id: 4
+
+  Bacon:
+    Name: "&6Bacon"
+    Type: "None"
+    Lore: "&bGreasy..."
+    Base: "COOKED_PORKCHOP"
+    Hunger-Fill: 5
+    Saturation: 7
+    Id: 5
+
+  Smokedapple:
+    Name: "&6Smoked Apple"
+    Type: "Smoker"
+    Lore: "&bReally just a smoker recipe test, otherwise identical to baked apple"
+    Recipe:
+      Ingredient: "APPLE"
+      Cook-Time: 55
+      Experience: 40
+    Base: "APPLE"
+    Hunger-Fill: 5
+    Saturation: 4
+    Id: 6
+
+  Woodsmokedapple:
+    Name: "&6Wood Smoked Apple"
+    Type: "Campfire"
+    Lore: "&bReally just a campfire recipe test, otherwise identical to baked apple"
+    Recipe:
+      Ingredient: "APPLE"
+      Cook-Time: 55
+      Experience: 40
+    Base: "APPLE"
+    Hunger-Fill: 5
+    Saturation: 4
+    Id: 7
+
+  Chickenkebab:
+    Name: "&6Chicken Kebab"
+    Type: "Shapeless"
+    Lore: "&bIt tastes like chicken..."
+    Ingredients:
+      STICK: 2
+      COOKED_CHICKEN: 1
+    Base: "COOKED_CHICKEN"
+    Hunger-Fill: 6
+    Saturation: 6
+    Id: 8
+
+  PoisonedGrass:
+    Name: "&2Poisoned Grass"
+    Type: "None"
+    Lore: "&bIt doesn't seem edible..."
+    Base: "DRIED_KELP"
+    Hunger-Fill: 2
+    Saturation: 1
+    Id: 9
+    #Example of potion effects on foods:
+    Effects:
+      POISON:
+      #Open with the potion effect type (found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html)
+        Duration: 60
+        #Duration in ticks (20 ticks per second)
+        Amplifier: 0
+        #Amplifier is the level minus one, so Poison 2 has an amplifier of 1
+      CONFUSION:
+      #Confusion = nausea
+        Duration: 40
+        Amplifier: 0

@@ -1,0 +1,26 @@
+name: MidensFoods
+version: 0.9
+author: Miden the Dev
+main: net.cozycosmos.midensfoods.Main
+api-version: 1.13
+
+commands:
+  cf:
+    description: Miden's Foods core command.
+    permission: customfoods.commands.core
+    aliases: [cf,customfoods]
+    usage: Use /cf to view Custom Foods commands
+
+permissions:
+  customfoods.commands.reload:
+    description: Gives access to the reload command
+    default: op
+  customfoods.commands.give:
+    description: Gives access to the give command
+    default: op
+  customfoods.commands.use:
+    description: Gives permission to use commands
+    default: op
+  customfoods.commands.create:
+    description: Gives access to the create command
+    default: op
