@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -79,22 +78,6 @@ public class Main extends JavaPlugin{
 
 		ItemStack recipeItemstack = new ItemStack(Material.REDSTONE);
 
-		RecipeChoice choice = new RecipeChoice() {
-			@Override
-			public ItemStack getItemStack() {
-				return recipeItemstack;
-			}
-
-			@Override
-			public RecipeChoice clone() {
-				return null;
-			}
-
-			@Override
-			public boolean test(ItemStack itemStack) {
-				return true;
-			}
-		};
 
 		getConfig().options().copyDefaults();
 		saveDefaultConfig();

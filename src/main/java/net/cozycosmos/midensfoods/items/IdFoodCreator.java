@@ -2,37 +2,26 @@ package net.cozycosmos.midensfoods.items;
 
 
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.cozycosmos.midensfoods.api.CustomFoodEatenEvent;
+import net.cozycosmos.midensfoods.util.CallCustomFoodEaten;
+import net.cozycosmos.midensfoods.util.GenerateFoodItemstack;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import net.cozycosmos.midensfoods.Main;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public class IdFoodCreator implements Listener {
 
     private final Main plugin = Main.getPlugin(Main.class);
     FileConfiguration config = plugin.getConfig();  //Accessing the config file
-    File foodValues = new File(Bukkit.getServer().getPluginManager().getPlugin("MidensFoods").getDataFolder(), "foodvalues.yml");
-    FileConfiguration foodvaluesyml = YamlConfiguration.loadConfiguration(foodValues);
-    File satValues = new File(Bukkit.getServer().getPluginManager().getPlugin("MidensFoods").getDataFolder(), "satvalues.yml");
-    FileConfiguration satvaluesyml = YamlConfiguration.loadConfiguration(satValues);
+
 
     public void ItemRecipe() {
         config = plugin.getConfig();
@@ -40,20 +29,7 @@ public class IdFoodCreator implements Listener {
 
             //make the food
 
-            ItemStack foodItem = new ItemStack(Material.getMaterial(config.getString("Recipes." + recipe + ".Base")));  //set the base item to the object defined as base in the config
-            ItemMeta meta = foodItem.getItemMeta(); //get the item's meta
-
-
-
-            //set the name
-            meta.setDisplayName(config.getString("Recipes." + recipe + ".Name").replace("&", "§"));
-
-            //create and set the lore
-            ArrayList<String> lore = new ArrayList<String>();
-            lore.add(config.getString( "Recipes." + recipe + ".Lore").replace("&", "§"));
-            meta.setLore(lore);
-            meta.setCustomModelData(config.getInt("Recipes." + recipe + ".Id"));
-            foodItem.setItemMeta(meta);
+            ItemStack foodItem = GenerateFoodItemstack.withID(recipe);
 
 
             //IF the recipe is a furnace recipe
@@ -81,7 +57,7 @@ public class IdFoodCreator implements Listener {
 
                     RecipeChoice ingr;
                     if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.LetterKeys." + Rletter))) {
-                        ingr = new RecipeChoice.ExactChoice(makeCustomFood(config.getString("Recipes." + recipe + ".Recipe.LetterKeys." + Rletter).substring(4)));
+                        ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.LetterKeys." + Rletter).substring(4)));
                     } else {
                         ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.LetterKeys." + Rletter)));
                     }
@@ -120,7 +96,7 @@ public class IdFoodCreator implements Listener {
 
                     RecipeChoice ingr;
                     if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Ingredients." + Ingredient))) {
-                        ingr = new RecipeChoice.ExactChoice(makeCustomFood(Ingredient.substring(4)));
+                        ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(Ingredient.substring(4)));
                     } else {
                         ingr = new RecipeChoice.MaterialChoice(Material.valueOf(Ingredient));
                     }
@@ -156,21 +132,7 @@ public class IdFoodCreator implements Listener {
                         if(event.getItem().getItemMeta().getCustomModelData() == config.getInt("Recipes." + food + ".Id")){
 
 
-                            List<PotionEffect> effects = new ArrayList<PotionEffect>();
-
-                            if(config.getConfigurationSection("Recipes." + food +".Effects") == null) {
-                                //do nothing
-                            } else {
-                                config.getConfigurationSection("Recipes." + food +".Effects").getKeys(false).forEach(effect -> {
-                                    PotionEffect tempEff = new PotionEffect(PotionEffectType.getByName(effect),config.getInt("Recipes." + food +".Effects."+effect+".Duration"),config.getInt("Recipes." + food +".Effects."+effect+".Amplitude"));
-                                    effects.add(tempEff);
-                                });
-                            }
-
-
-
-                            CustomFoodEatenEvent foodEvent = new CustomFoodEatenEvent(p,config.getInt("Recipes." + food + ".Id"),config.getString("Recipes." + food + ".Name"),food,config.getInt("Recipes." + food + ".Hunger-Fill"),config.getInt("Recipes." + food + ".Saturation"),Material.valueOf(config.getString("Recipes." + food + ".Base")),false,effects);
-                            Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getServer().getPluginManager().callEvent(foodEvent));
+                            CallCustomFoodEaten.CallEvent(food,p);
                             return;
 
 
@@ -196,26 +158,7 @@ public class IdFoodCreator implements Listener {
 
     }
 
-    public ItemStack makeCustomFood(String name) {
-        config = plugin.getConfig();
 
-            //make the food
-
-            ItemStack foodItem = new ItemStack(Material.getMaterial(config.getString("Recipes." + name + ".Base")));  //set the base item to the object defined as base in the config
-            ItemMeta meta = foodItem.getItemMeta(); //get the item's meta
-
-
-            //set the name
-            meta.setDisplayName(config.getString("Recipes." + name + ".Name").replace("&", "§"));
-
-            //create and set the lore
-            ArrayList<String> lore = new ArrayList<String>();
-            lore.add(config.getString("Recipes." + name + ".Lore").replace("&", "§"));
-            meta.setLore(lore);
-            meta.setCustomModelData(config.getInt("Recipes." + name + ".Id"));
-            foodItem.setItemMeta(meta);
-        return foodItem;
-    }
 
 }
 

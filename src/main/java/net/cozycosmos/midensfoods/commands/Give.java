@@ -1,8 +1,8 @@
 package net.cozycosmos.midensfoods.commands;
 
 import java.io.File;
-import java.util.ArrayList;
 
+import net.cozycosmos.midensfoods.util.GenerateFoodItemstack;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -13,7 +13,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import net.cozycosmos.midensfoods.Main;
 
@@ -35,20 +34,17 @@ public class Give{
 		config = plugin.getConfig();
 			config.getConfigurationSection("Recipes").getKeys(false).forEach(recipe -> {
 				ItemStack foodItem = new ItemStack(Material.getMaterial(config.getString("Recipes." + recipe + ".Base")));  //set the base item to the object defined as base in the config
-				ItemMeta meta = foodItem.getItemMeta(); //get the item's meta
 				if (args[1].equalsIgnoreCase(recipe)) {
 					if (foodItem != null) {
 
-						//set the name
-						meta.setDisplayName(config.getString("Recipes." + recipe + ".Name").replace("&", "§"));
 
-						//create and set the lore
-						ArrayList<String> lore = new ArrayList<String>();
-						lore.add(config.getString( "Recipes." + recipe + ".Lore").replace("&", "§"));
-						meta.setLore(lore);
 						if(!config.getBoolean("LegacySystem") || !Bukkit.getVersion().contains("1.13") ||!Bukkit.getVersion().contains("1.8")|| !Bukkit.getVersion().contains("1.9")|| !Bukkit.getVersion().contains("1.10")|| !Bukkit.getVersion().contains("1.11")|| !Bukkit.getVersion().contains("1.12"))
-						{meta.setCustomModelData(config.getInt("Recipes." + recipe + ".Id"));}
-						foodItem.setItemMeta(meta);
+						{
+							foodItem = GenerateFoodItemstack.withID(recipe);
+						} else {
+							foodItem = GenerateFoodItemstack.noID(recipe);
+						}
+
 
 						Inventory inv = ((Player) sender).getInventory();
 						sender.sendMessage(messagesyml.getString("GiveCommandGivingItem").replace("&", "§") + recipe);

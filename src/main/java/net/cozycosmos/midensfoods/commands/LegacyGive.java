@@ -1,6 +1,7 @@
 package net.cozycosmos.midensfoods.commands;
 
 import net.cozycosmos.midensfoods.Main;
+import net.cozycosmos.midensfoods.util.GenerateFoodItemstack;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,14 +40,7 @@ public class LegacyGive {
 				if (args[1].equalsIgnoreCase(recipe)) {
 					if (foodItem != null) {
 
-						//set the name
-						meta.setDisplayName(config.getString("Recipes." + recipe + ".Name").replace("&", "§"));
-
-						//create and set the lore
-						ArrayList<String> lore = new ArrayList<String>();
-						lore.add(config.getString( "Recipes." + recipe + ".Lore").replace("&", "§"));
-						meta.setLore(lore);
-						foodItem.setItemMeta(meta);
+						foodItem = GenerateFoodItemstack.noID(recipe);
 
 						Inventory inv = ((Player) sender).getInventory();
 						sender.sendMessage(messagesyml.getString("GiveCommandGivingItem").replace("&", "§") + recipe);

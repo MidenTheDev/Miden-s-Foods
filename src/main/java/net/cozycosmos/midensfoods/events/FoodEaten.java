@@ -25,13 +25,14 @@ public class FoodEaten implements Listener {
     public void FoodEaten (CustomFoodEatenEvent e) {
         Player p = e.getPlayer();
         List<PotionEffect> effects = e.getEffects();
+        List<String> commands = e.getCommands();
 
         int foodlevel = p.getFoodLevel();
         float satlevel = p.getSaturation();
         foodlevel += e.getHungerFill();
         foodlevel -= foodvaluesyml.getInt(e.getFoodBase().toString());
         satlevel += e.getSaturationFill();
-        satlevel -= satvaluesyml.getInt(e.getFoodBase().toString());
+        satlevel -= satvaluesyml.getDouble(e.getFoodBase().toString());
 
         p.setFoodLevel(foodlevel);
         p.setSaturation(satlevel);
@@ -42,6 +43,16 @@ public class FoodEaten implements Listener {
             effects.forEach(effect -> {
                 p.addPotionEffect(effect);
             });
+        }
+
+        if (commands.equals(null)) {
+            //do nothing
+        } else {
+            commands.forEach(cmd -> {
+                String finalCmd = cmd.replace("%player%", e.getPlayer().getName());
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd);
+            });
+
         }
 
 

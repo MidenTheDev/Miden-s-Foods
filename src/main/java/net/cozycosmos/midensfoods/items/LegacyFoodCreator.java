@@ -3,10 +3,9 @@ package net.cozycosmos.midensfoods.items;
 
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import net.cozycosmos.midensfoods.api.CustomFoodEatenEvent;
+import net.cozycosmos.midensfoods.util.CallCustomFoodEaten;
+import net.cozycosmos.midensfoods.util.GenerateFoodItemstack;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,8 +21,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 
 import net.cozycosmos.midensfoods.Main;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public class LegacyFoodCreator implements Listener {
 	
@@ -42,18 +39,7 @@ public class LegacyFoodCreator implements Listener {
 
 			//make the food
 
-			ItemStack foodItem = new ItemStack(Material.getMaterial(config.getString("Recipes." + recipe + ".Base")));  //set the base item to the object defined as base in the config
-			ItemMeta meta = foodItem.getItemMeta(); //get the item's meta
-
-
-			//set the name
-			meta.setDisplayName(config.getString("Recipes." + recipe + ".Name").replace("&", "§"));
-
-			//create and set the lore
-			ArrayList<String> lore = new ArrayList<String>();
-			lore.add(config.getString( "Recipes." + recipe + ".Lore").replace("&", "§"));
-			meta.setLore(lore);
-			foodItem.setItemMeta(meta);
+			ItemStack foodItem = GenerateFoodItemstack.noID(recipe);
 
 			//IF the recipe is a furnace recipe
 			if(config.getString("Recipes." + recipe + ".Type").equals("Furnace")) {
@@ -110,22 +96,12 @@ public class LegacyFoodCreator implements Listener {
 
 		config = plugin.getConfig();
 		config.getConfigurationSection("Recipes").getKeys(false).forEach(food -> {
-		
-			//make the Chocolate Bar
-			ItemStack Efood = new ItemStack(Material.getMaterial(config.getString("Recipes." + food + ".Base")));
-			ItemMeta meta = Efood.getItemMeta();
-			
-			//set the name
-			meta.setDisplayName(config.getString("Recipes." + food + ".Name").replace("&", "§"));
-			
-			//create and set the lore
-			ArrayList<String> lore = new ArrayList<String>();
-			lore.add(config.getString( "Recipes." + food + ".Lore").replace("&", "§"));
-			meta.setLore(lore);
-			
-			
-			//set the item meta
-			Efood.setItemMeta(meta);
+
+			//make the Fooditem
+
+			ItemMeta meta = GenerateFoodItemstack.noID(food).getItemMeta();
+
+
 			
 			//if the entity is a player
 			Player p = (Player) event.getEntity();
@@ -133,19 +109,7 @@ public class LegacyFoodCreator implements Listener {
 				
 				if(event.getEntity().getItemInHand().getItemMeta().equals(meta)) {
 
-					List<PotionEffect> effects = new ArrayList<PotionEffect>();
-
-					if(config.getConfigurationSection("Recipes." + food +".Effects") == null) {
-						//do nothing
-					} else {
-						config.getConfigurationSection("Recipes." + food +".Effects").getKeys(false).forEach(effect -> {
-							PotionEffect tempEff = new PotionEffect(PotionEffectType.getByName(effect),config.getInt("Recipes." + food +".Effects."+effect+".Duration"),config.getInt("Recipes." + food +".Effects."+effect+".Amplitude"));
-							effects.add(tempEff);
-						});
-					}
-
-					CustomFoodEatenEvent foodEvent = new CustomFoodEatenEvent(p,config.getInt("Recipes." + food + ".Id"),config.getString("Recipes." + food + ".Name"),food,config.getInt("Recipes." + food + ".Hunger-Fill"),config.getInt("Recipes." + food + ".Saturation"),Material.valueOf(config.getString("Recipes." + food + ".Base")),true,effects);
-					Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getServer().getPluginManager().callEvent(foodEvent));
+					CallCustomFoodEaten.CallEvent(food,p);
 					return;
 
 				}

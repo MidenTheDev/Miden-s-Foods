@@ -12,7 +12,8 @@ Recipes:
     #Name of the food (what the item will show up as)
     Type: "Furnace"
     #Furnace or crafting table? Write Furnace for furnace and Table for crafting table. Smoker not yet supported
-    Lore: "&bmmm... toasty"
+    Lore:
+    - "&bmmm... toasty"
     #The lore of the item, only one string supported for now
     Recipe:
       Ingredient: "BREAD"
@@ -26,7 +27,7 @@ Recipes:
     Hunger-Fill: 6
     #How much hunger it will fill. 1 = half a hunger bar 20 = full hunger.
     Saturation: 5
-    #How much saturation it will restore. same formula as hunger fill.
+    #How much saturation it will restore. same formula as hunger fill, but with decimals.
     Id: 1
     #Tells my plugin what food you're eating!
     #Also allows for Custom Models with a resource pack.
@@ -35,7 +36,8 @@ Recipes:
   BaconBurger:
     Name: "&6Bacon Burger"
     Type: "Shaped"
-    Lore: "&bTasty Burger"
+    Lore:
+    - "&bTasty Burger"
     Recipe:
       TableLine1: " B "
       TableLine2: "KMS"
@@ -47,16 +49,18 @@ Recipes:
         M: "COOKED_BEEF"
         S: "CFD-Bacon"
       #What materials the letters in the recipe are representing.
+      #Use "CFD-[FoodConfigName]" to use a custom food in the crafting recipe of another custom food
     Base: "COOKED_BEEF"
     Hunger-Fill: 10
-    Saturation: 15
+    Saturation: 6.5
     Id: 2
 #Incompatible with 1.13!
 
   Chocolatebar:
     Name: "&6Chocolate Bar"
     Type: "Shaped"
-    Lore: "&bmmmm... chocolatey"
+    Lore:
+    - "&bmmmm... chocolatey"
     Recipe:
       TableLine1: "   "
       TableLine2: "CMC"
@@ -66,13 +70,14 @@ Recipes:
         M: "MILK_BUCKET"
     Base: "DRIED_KELP"
     Hunger-Fill: 3
-    Saturation: 3
+    Saturation: 3.2
     Id: 3
 
   Bakedapple:
     Name: "&6Baked Apple"
     Type: "Furnace"
-    Lore: "&bAn apple and an open flame makes for a succulent treat"
+    Lore:
+    - "&bAn apple and an open flame makes for a succulent treat"
     Recipe:
       Ingredient: "APPLE"
       Cook-Time: 55
@@ -85,57 +90,62 @@ Recipes:
   Bacon:
     Name: "&6Bacon"
     Type: "None"
-    Lore: "&bGreasy..."
+    Lore:
+    - "&bGreasy..."
     Base: "COOKED_PORKCHOP"
     Hunger-Fill: 5
-    Saturation: 7
+    Saturation: 5.4
     Id: 5
 
   Smokedapple:
     Name: "&6Smoked Apple"
     Type: "Smoker"
-    Lore: "&bReally just a smoker recipe test, otherwise identical to baked apple"
+    Lore:
+    - "&bReally just a smoker recipe test, otherwise identical to baked apple"
     Recipe:
       Ingredient: "APPLE"
       Cook-Time: 55
       Experience: 40
     Base: "APPLE"
     Hunger-Fill: 5
-    Saturation: 4
+    Saturation: 2.1
     Id: 6
 
   Woodsmokedapple:
     Name: "&6Wood Smoked Apple"
     Type: "Campfire"
-    Lore: "&bReally just a campfire recipe test, otherwise identical to baked apple"
+    Lore:
+    - "&bReally just a campfire recipe test, otherwise identical to baked apple"
     Recipe:
       Ingredient: "APPLE"
       Cook-Time: 55
       Experience: 40
     Base: "APPLE"
     Hunger-Fill: 5
-    Saturation: 4
+    Saturation: 2.2
     Id: 7
 
   Chickenkebab:
     Name: "&6Chicken Kebab"
     Type: "Shapeless"
-    Lore: "&bIt tastes like chicken..."
+    Lore:
+    - "&bIt tastes like chicken..."
     Ingredients:
       STICK: 2
       COOKED_CHICKEN: 1
     Base: "COOKED_CHICKEN"
     Hunger-Fill: 6
-    Saturation: 6
+    Saturation: 5.5
     Id: 8
 
   PoisonedGrass:
     Name: "&2Poisoned Grass"
     Type: "None"
-    Lore: "&bIt doesn't seem edible..."
+    Lore:
+    - "&bIt doesn't seem edible..."
     Base: "DRIED_KELP"
     Hunger-Fill: 2
-    Saturation: 1
+    Saturation: 0.1
     Id: 9
     #Example of potion effects on foods:
     Effects:
@@ -149,3 +159,20 @@ Recipes:
       #Confusion = nausea
         Duration: 40
         Amplifier: 0
+
+  GoldenChicken:
+    Name: "&6Golden Chicken"
+    Type: "Shapeless"
+    Lore:
+    - "&bIt tastes like metal..."
+    Ingredients:
+      GOLD_INGOT: 3
+      COOKED_CHICKEN: 1
+    #Example of commands on foods:
+    #Commands are executed at the console level
+    Commands:
+      - eco give %player% 10
+    Base: "COOKED_CHICKEN"
+    Hunger-Fill: 3
+    Saturation: 3
+    Id: 10
