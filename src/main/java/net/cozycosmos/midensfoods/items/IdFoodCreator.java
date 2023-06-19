@@ -30,14 +30,20 @@ public class IdFoodCreator implements Listener {
             //make the food
 
             ItemStack foodItem = GenerateFoodItemstack.withID(recipe);
-
+            foodItem.setAmount(config.getInt("Recipes." + recipe + ".Recipe.Amount",1));
 
             //IF the recipe is a furnace recipe
             if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Furnace")) {
+                NamespacedKey Key = new NamespacedKey(plugin, recipe);
 
+                RecipeChoice ingr;
+                if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.Ingredient"))) {
+                    ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.Ingredient").substring(4)));
+                } else {
+                    ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+                }
 
-
-                FurnaceRecipe newFurnaceRecipe = new FurnaceRecipe(foodItem, Material.getMaterial(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+                FurnaceRecipe newFurnaceRecipe = new FurnaceRecipe(Key, foodItem, ingr, 0, 0);
                 newFurnaceRecipe.setExperience(config.getInt("Recipes." + recipe + ".Recipe.Experience"));
                 newFurnaceRecipe.setCookingTime(config.getInt("Recipes." + recipe + ".Recipe.Cook-Time"));
                 plugin.getServer().addRecipe(newFurnaceRecipe);
@@ -72,30 +78,49 @@ public class IdFoodCreator implements Listener {
 
             else if (config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("None")) {
                 //Do nothing, no recipe needed! This statement is only here to prevent the error
+            }
 
-
-            } else if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Smoker")) {
+            else if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Smoker")) {
 
                 NamespacedKey Key = new NamespacedKey(plugin, recipe);
-                SmokingRecipe newSmokingRecipe = new SmokingRecipe(Key, foodItem, Material.getMaterial(config.getString("Recipes." + recipe + ".Recipe.Ingredient")), 0, 0);
+
+                RecipeChoice ingr;
+                if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.Ingredient"))) {
+                    ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.Ingredient").substring(4)));
+                } else {
+                    ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+                }
+
+                SmokingRecipe newSmokingRecipe = new SmokingRecipe(Key, foodItem, ingr, 0, 0);
                 newSmokingRecipe.setExperience(config.getInt("Recipes." + recipe + ".Recipe.Experience"));
                 newSmokingRecipe.setCookingTime(config.getInt("Recipes." + recipe + ".Recipe.Cook-Time"));
                 plugin.getServer().addRecipe(newSmokingRecipe);
 
-            } else if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Campfire")) {
+            }
+
+            else if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Campfire")) {
                 NamespacedKey Key = new NamespacedKey(plugin, recipe);
-                CampfireRecipe newCampRecipe = new CampfireRecipe(Key, foodItem, Material.getMaterial(config.getString("Recipes." + recipe + ".Recipe.Ingredient")), 0, 0);
+                CampfireRecipe newCampRecipe;
+
+                RecipeChoice ingr;
+                if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.Ingredient"))) {
+                    ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.Ingredient").substring(4)));
+                } else {
+                    ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+                }
+                newCampRecipe = new CampfireRecipe(Key, foodItem, ingr, 0, 0);
                 newCampRecipe.setExperience(config.getInt("Recipes." + recipe + ".Recipe.Experience"));
                 newCampRecipe.setCookingTime(config.getInt("Recipes." + recipe + ".Recipe.Cook-Time"));
                 plugin.getServer().addRecipe(newCampRecipe);
 
-            } else if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Shapeless")) {
+            }
+
+            else if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Shapeless")) {
                 NamespacedKey Key = new NamespacedKey(plugin, recipe);
                 ShapelessRecipe newShapelessRecipe = new ShapelessRecipe(Key, foodItem);
                 config.getConfigurationSection("Recipes." + recipe + ".Ingredients").getKeys(false).forEach(Ingredient -> {
-
                     RecipeChoice ingr;
-                    if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Ingredients." + Ingredient))) {
+                    if(checkCustomIngredient(Ingredient)) {
                         ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(Ingredient.substring(4)));
                     } else {
                         ingr = new RecipeChoice.MaterialChoice(Material.valueOf(Ingredient));
@@ -148,8 +173,7 @@ public class IdFoodCreator implements Listener {
         if(ingr.length()<=4) {
             return false;
         } else {
-            String prefix = ingr.substring(0,4);
-            if(prefix.equals("CFD-")) {
+            if(ingr.substring(0,4).equals("CFD-")) {
                 return true;
             } else {
                 return false;

@@ -4,6 +4,8 @@ LegacySystem: false
 #Note that the ID system is MUCH more efficient than the old system!
 #SMOKER AND CAMPFIRE RECIPES WILL NOT WORK WHEN USING THE LEGACY SYSTEM!
 #When using the legacy system, you will not be able to use custom foods in other foods' recipes, unless using a 3rd party crafting plugin.
+Config-Format: 0.9.2
+#Do not touch or delete!
 
 Recipes:
   #EXAMPLES:
@@ -162,12 +164,9 @@ Recipes:
 
   GoldenChicken:
     Name: "&6Golden Chicken"
-    Type: "Shapeless"
+    Type: "none"
     Lore:
     - "&bIt tastes like metal..."
-    Ingredients:
-      GOLD_INGOT: 3
-      COOKED_CHICKEN: 1
     #Example of commands on foods:
     #Commands are executed at the console level
     Commands:

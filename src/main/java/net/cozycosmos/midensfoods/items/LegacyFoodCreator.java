@@ -26,11 +26,6 @@ public class LegacyFoodCreator implements Listener {
 	
 	private final Main plugin = Main.getPlugin(Main.class);
 	FileConfiguration config = plugin.getConfig();  //Accessing the config file
-	File foodValues = new File(Bukkit.getServer().getPluginManager().getPlugin("MidensFoods").getDataFolder(), "foodvalues.yml");
-	FileConfiguration foodvaluesyml = YamlConfiguration.loadConfiguration(foodValues);
-	File satValues = new File(Bukkit.getServer().getPluginManager().getPlugin("MidensFoods").getDataFolder(), "satvalues.yml");
-	FileConfiguration satvaluesyml = YamlConfiguration.loadConfiguration(satValues);
-
 
 	public void ItemRecipe() {
 
@@ -40,6 +35,7 @@ public class LegacyFoodCreator implements Listener {
 			//make the food
 
 			ItemStack foodItem = GenerateFoodItemstack.noID(recipe);
+			foodItem.setAmount(config.getInt("Recipes." + recipe + ".Recipe.Amount",1));
 
 			//IF the recipe is a furnace recipe
 			if(config.getString("Recipes." + recipe + ".Type").equals("Furnace")) {

@@ -24,7 +24,7 @@ public class CallCustomFoodEaten {
             //do nothing
         } else {
             config.getConfigurationSection("Recipes." + food +".Effects").getKeys(false).forEach(effect -> {
-                PotionEffect tempEff = new PotionEffect(PotionEffectType.getByName(effect),config.getInt("Recipes." + food +".Effects."+effect+".Duration"),config.getInt("Recipes." + food +".Effects."+effect+".Amplitude"));
+                PotionEffect tempEff = new PotionEffect(PotionEffectType.getByName(effect),config.getInt("Recipes." + food +".Effects."+effect+".Duration"),config.getInt("Recipes." + food +".Effects."+effect+".Amplifier"));
                 effects.add(tempEff);
             });
         }

@@ -81,7 +81,6 @@ public class Main extends JavaPlugin{
 
 		getConfig().options().copyDefaults();
 		saveDefaultConfig();
-		reloadConfig();
 		registerRecipes();
 		registerEvents();
 		registerCommands();
