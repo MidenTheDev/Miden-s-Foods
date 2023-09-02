@@ -4,7 +4,7 @@ LegacySystem: false
 #Note that the ID system is MUCH more efficient than the old system!
 #SMOKER AND CAMPFIRE RECIPES WILL NOT WORK WHEN USING THE LEGACY SYSTEM!
 #When using the legacy system, you will not be able to use custom foods in other foods' recipes, unless using a 3rd party crafting plugin.
-Config-Format: 0.9.2
+Config-Format: 1.0
 #Do not touch or delete!
 
 Recipes:
@@ -12,8 +12,8 @@ Recipes:
   Toast:
     Name: "&6Toast"
     #Name of the food (what the item will show up as)
-    Type: "Furnace"
-    #Furnace or crafting table? Write Furnace for furnace and Table for crafting table. Smoker not yet supported
+    Recipe-Type: "Furnace"
+    #What crafting station is this food made at? Options are Furnace, Smoker, Campfire, Blast Furnace, Shaped, and Shapeless.
     Lore:
     - "&bmmm... toasty"
     #The lore of the item, only one string supported for now
@@ -22,8 +22,10 @@ Recipes:
       #The item going into the furnace
       Cook-Time: 100
       #How long, in ticks, the food will take to cook
-      Experience: 30
+      Experience: 5
       #Amount of experience rewarded for cooking
+      Amount: 1
+      #The amount produced by the recipe.
     Base: "BREAD"
     #What the new food will appear as in your hand, can be changed via resource pack. See foodvalues.yml for all supported base items
     Hunger-Fill: 6
@@ -37,7 +39,7 @@ Recipes:
 
   BaconBurger:
     Name: "&6Bacon Burger"
-    Type: "Shaped"
+    Recipe-Type: "Shaped"
     Lore:
     - "&bTasty Burger"
     Recipe:
@@ -50,6 +52,7 @@ Recipes:
         K: "DRIED_KELP"
         M: "COOKED_BEEF"
         S: "CFD-Bacon"
+      Amount: 1
       #What materials the letters in the recipe are representing.
       #Use "CFD-[FoodConfigName]" to use a custom food in the crafting recipe of another custom food
     Base: "COOKED_BEEF"
@@ -60,7 +63,7 @@ Recipes:
 
   Chocolatebar:
     Name: "&6Chocolate Bar"
-    Type: "Shaped"
+    Recipe-Type: "Shaped"
     Lore:
     - "&bmmmm... chocolatey"
     Recipe:
@@ -70,6 +73,7 @@ Recipes:
       LetterKeys:
         C: "COCOA_BEANS"
         M: "MILK_BUCKET"
+      Amount: 1
     Base: "DRIED_KELP"
     Hunger-Fill: 3
     Saturation: 3.2
@@ -77,13 +81,14 @@ Recipes:
 
   Bakedapple:
     Name: "&6Baked Apple"
-    Type: "Furnace"
+    Recipe-Type: "Furnace"
     Lore:
     - "&bAn apple and an open flame makes for a succulent treat"
     Recipe:
       Ingredient: "APPLE"
       Cook-Time: 55
-      Experience: 40
+      Experience: 5
+      Amount: 1
     Base: "APPLE"
     Hunger-Fill: 5
     Saturation: 4
@@ -91,7 +96,7 @@ Recipes:
 
   Bacon:
     Name: "&6Bacon"
-    Type: "None"
+    Recipe-Type: "None"
     Lore:
     - "&bGreasy..."
     Base: "COOKED_PORKCHOP"
@@ -101,13 +106,14 @@ Recipes:
 
   Smokedapple:
     Name: "&6Smoked Apple"
-    Type: "Smoker"
+    Recipe-Type: "Smoker"
     Lore:
     - "&bReally just a smoker recipe test, otherwise identical to baked apple"
     Recipe:
       Ingredient: "APPLE"
       Cook-Time: 55
-      Experience: 40
+      Experience: 5
+      Amount: 1
     Base: "APPLE"
     Hunger-Fill: 5
     Saturation: 2.1
@@ -115,13 +121,15 @@ Recipes:
 
   Woodsmokedapple:
     Name: "&6Wood Smoked Apple"
-    Type: "Campfire"
+    Recipe-Type: "Campfire"
     Lore:
     - "&bReally just a campfire recipe test, otherwise identical to baked apple"
     Recipe:
+
       Ingredient: "APPLE"
       Cook-Time: 55
-      Experience: 40
+      Experience: 5
+      Amount: 1
     Base: "APPLE"
     Hunger-Fill: 5
     Saturation: 2.2
@@ -129,20 +137,22 @@ Recipes:
 
   Chickenkebab:
     Name: "&6Chicken Kebab"
-    Type: "Shapeless"
+    Recipe-Type: "Shapeless"
     Lore:
     - "&bIt tastes like chicken..."
-    Ingredients:
-      STICK: 2
-      COOKED_CHICKEN: 1
+    Recipe:
+      Amount: 2
+      Ingredients:
+        STICK: 2
+        COOKED_CHICKEN: 1
     Base: "COOKED_CHICKEN"
-    Hunger-Fill: 6
+    Hunger-Fill: 3
     Saturation: 5.5
     Id: 8
 
   PoisonedGrass:
     Name: "&2Poisoned Grass"
-    Type: "None"
+    Recipe-Type: "None"
     Lore:
     - "&bIt doesn't seem edible..."
     Base: "DRIED_KELP"
@@ -152,7 +162,7 @@ Recipes:
     #Example of potion effects on foods:
     Effects:
       POISON:
-      #Open with the potion effect type (found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html)
+      #Open with the potion effect Type (found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html)
         Duration: 60
         #Duration in ticks (20 ticks per second)
         Amplifier: 0
@@ -164,7 +174,7 @@ Recipes:
 
   GoldenChicken:
     Name: "&6Golden Chicken"
-    Type: "none"
+    Recipe-Type: "none"
     Lore:
     - "&bIt tastes like metal..."
     #Example of commands on foods:
@@ -175,3 +185,18 @@ Recipes:
     Hunger-Fill: 3
     Saturation: 3
     Id: 10
+
+  CoalBlastedApple:
+    Name: "&6Coal Blasted Apple"
+    Recipe-Type: "Blast Furnace"
+    Lore:
+      - "&bReally just a blast furnace recipe test, otherwise identical to baked apple"
+    Recipe:
+      Ingredient: "APPLE"
+      Cook-Time: 55
+      Experience: 5
+      Amount: 1
+    Base: "APPLE"
+    Hunger-Fill: 5
+    Saturation: 2.2
+    Id: 11

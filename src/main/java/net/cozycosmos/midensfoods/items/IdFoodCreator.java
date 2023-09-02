@@ -33,25 +33,50 @@ public class IdFoodCreator implements Listener {
             foodItem.setAmount(config.getInt("Recipes." + recipe + ".Recipe.Amount",1));
 
             //IF the recipe is a furnace recipe
-            if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Furnace")) {
+            if(config.getString("Recipes." + recipe + "..Recipe-Type").equalsIgnoreCase("Furnace")) {
                 NamespacedKey Key = new NamespacedKey(plugin, recipe);
 
                 RecipeChoice ingr;
-                if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.Ingredient"))) {
-                    ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.Ingredient").substring(4)));
-                } else {
-                    ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+                try {
+                    if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.Ingredient"))) {
+                        ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.Ingredient").substring(4)));
+                    } else {
+                        ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+                    }
+                    FurnaceRecipe newFurnaceRecipe = new FurnaceRecipe(Key, foodItem, ingr, 0, 0);
+                    newFurnaceRecipe.setExperience(config.getInt("Recipes." + recipe + ".Recipe.Experience"));
+                    newFurnaceRecipe.setCookingTime(config.getInt("Recipes." + recipe + ".Recipe.Cook-Time"));
+                    plugin.getServer().addRecipe(newFurnaceRecipe);
+                } catch (NullPointerException er) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Error! Ingredient " + config.getString("Recipes." + recipe + ".Recipe.Ingredient") + " may not be a valid ingredient!");
+                    er.printStackTrace();
+                }
+                
+
+            } else if(config.getString("Recipes." + recipe + "..Recipe-Type").equalsIgnoreCase("Blast Furnace")) {
+                NamespacedKey Key = new NamespacedKey(plugin, recipe);
+
+                RecipeChoice ingr;
+                try {
+                    if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.Ingredient"))) {
+                        ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.Ingredient").substring(4)));
+                    } else {
+                        ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+                    }
+                    BlastingRecipe newBlastingRecipe = new BlastingRecipe(Key, foodItem, ingr, 0, 0);
+                    newBlastingRecipe.setExperience(config.getInt("Recipes." + recipe + ".Recipe.Experience"));
+                    newBlastingRecipe.setCookingTime(config.getInt("Recipes." + recipe + ".Recipe.Cook-Time"));
+                    plugin.getServer().addRecipe(newBlastingRecipe);
+                } catch (NullPointerException er) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Error! Ingredient " + config.getString("Recipes." + recipe + ".Recipe.Ingredient") + " may not be a valid ingredient!");
+                    er.printStackTrace();
                 }
 
-                FurnaceRecipe newFurnaceRecipe = new FurnaceRecipe(Key, foodItem, ingr, 0, 0);
-                newFurnaceRecipe.setExperience(config.getInt("Recipes." + recipe + ".Recipe.Experience"));
-                newFurnaceRecipe.setCookingTime(config.getInt("Recipes." + recipe + ".Recipe.Cook-Time"));
-                plugin.getServer().addRecipe(newFurnaceRecipe);
 
             }
 
             //IF the "Recipes." + recipe is a crafting table recipe
-            else if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Shaped")) {
+            else if(config.getString("Recipes." + recipe + ".Recipe-Type").equalsIgnoreCase("Shaped")) {
 
                 NamespacedKey Key = new NamespacedKey(plugin, recipe);
                 ShapedRecipe theRecipe = new ShapedRecipe(Key, foodItem);
@@ -62,13 +87,20 @@ public class IdFoodCreator implements Listener {
                 config.getConfigurationSection("Recipes." + recipe + ".Recipe.LetterKeys").getKeys(false).forEach(Rletter -> {
 
                     RecipeChoice ingr;
-                    if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.LetterKeys." + Rletter))) {
-                        ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.LetterKeys." + Rletter).substring(4)));
-                    } else {
-                        ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.LetterKeys." + Rletter)));
+                    try {
+                        if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.LetterKeys." + Rletter))) {
+                            ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.LetterKeys." + Rletter).substring(4)));
+                        } else {
+                            ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.LetterKeys." + Rletter)));
+
+                        }
+                        theRecipe.setIngredient(Rletter.charAt(0), ingr);
+                    } catch (NullPointerException er) {
+                        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Error! Ingredient " + config.getString("Recipes." + recipe + ".Recipe.Ingredient") + " may not be a valid ingredient!");
+                        er.printStackTrace();
                     }
 
-                    theRecipe.setIngredient(Rletter.charAt(0), ingr);
+
 
                 });
 
@@ -76,64 +108,84 @@ public class IdFoodCreator implements Listener {
             }
 
 
-            else if (config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("None")) {
+            else if (config.getString("Recipes." + recipe + ".Recipe-Type").equalsIgnoreCase("None")) {
                 //Do nothing, no recipe needed! This statement is only here to prevent the error
             }
 
-            else if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Smoker")) {
+            else if(config.getString("Recipes." + recipe + ".Recipe-Type").equalsIgnoreCase("Smoker")) {
 
                 NamespacedKey Key = new NamespacedKey(plugin, recipe);
 
                 RecipeChoice ingr;
-                if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.Ingredient"))) {
-                    ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.Ingredient").substring(4)));
-                } else {
-                    ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+                try {
+                    if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.Ingredient"))) {
+                        ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.Ingredient").substring(4)));
+                    } else {
+                        ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+                    }
+                    SmokingRecipe newSmokingRecipe = new SmokingRecipe(Key, foodItem, ingr, 0, 0);
+                    newSmokingRecipe.setExperience(config.getInt("Recipes." + recipe + ".Recipe.Experience"));
+                    newSmokingRecipe.setCookingTime(config.getInt("Recipes." + recipe + ".Recipe.Cook-Time"));
+                    plugin.getServer().addRecipe(newSmokingRecipe);
+
+                } catch (NullPointerException er) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Error! Ingredient " + config.getString("Recipes." + recipe + ".Recipe.Ingredient") + " may not be a valid ingredient!");
+                    er.printStackTrace();
                 }
 
-                SmokingRecipe newSmokingRecipe = new SmokingRecipe(Key, foodItem, ingr, 0, 0);
-                newSmokingRecipe.setExperience(config.getInt("Recipes." + recipe + ".Recipe.Experience"));
-                newSmokingRecipe.setCookingTime(config.getInt("Recipes." + recipe + ".Recipe.Cook-Time"));
-                plugin.getServer().addRecipe(newSmokingRecipe);
 
             }
 
-            else if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Campfire")) {
+            else if(config.getString("Recipes." + recipe + ".Recipe-Type").equalsIgnoreCase("Campfire")) {
                 NamespacedKey Key = new NamespacedKey(plugin, recipe);
                 CampfireRecipe newCampRecipe;
 
                 RecipeChoice ingr;
-                if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.Ingredient"))) {
-                    ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.Ingredient").substring(4)));
-                } else {
-                    ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+
+                try {
+                    if(checkCustomIngredient(config.getString("Recipes." + recipe + ".Recipe.Ingredient"))) {
+                        ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(config.getString("Recipes." + recipe + ".Recipe.Ingredient").substring(4)));
+                    } else {
+                        ingr = new RecipeChoice.MaterialChoice(Material.valueOf(config.getString("Recipes." + recipe + ".Recipe.Ingredient")));
+                    }
+                    newCampRecipe = new CampfireRecipe(Key, foodItem, ingr, 0, 0);
+                    newCampRecipe.setExperience(config.getInt("Recipes." + recipe + ".Recipe.Experience"));
+                    newCampRecipe.setCookingTime(config.getInt("Recipes." + recipe + ".Recipe.Cook-Time"));
+                    plugin.getServer().addRecipe(newCampRecipe);
+                } catch (NullPointerException er) {
+                    Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Error! Ingredient " + config.getString("Recipes." + recipe + ".Recipe.Ingredient") + " may not be a valid ingredient!");
+                    er.printStackTrace();
                 }
-                newCampRecipe = new CampfireRecipe(Key, foodItem, ingr, 0, 0);
-                newCampRecipe.setExperience(config.getInt("Recipes." + recipe + ".Recipe.Experience"));
-                newCampRecipe.setCookingTime(config.getInt("Recipes." + recipe + ".Recipe.Cook-Time"));
-                plugin.getServer().addRecipe(newCampRecipe);
+
+
 
             }
 
-            else if(config.getString("Recipes." + recipe + ".Type").equalsIgnoreCase("Shapeless")) {
+            else if(config.getString("Recipes." + recipe + ".Recipe-Type").equalsIgnoreCase("Shapeless")) {
                 NamespacedKey Key = new NamespacedKey(plugin, recipe);
                 ShapelessRecipe newShapelessRecipe = new ShapelessRecipe(Key, foodItem);
-                config.getConfigurationSection("Recipes." + recipe + ".Ingredients").getKeys(false).forEach(Ingredient -> {
+                config.getConfigurationSection("Recipes." + recipe + ".Recipe.Ingredients").getKeys(false).forEach(Ingredient -> {
                     RecipeChoice ingr;
-                    if(checkCustomIngredient(Ingredient)) {
-                        ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(Ingredient.substring(4)));
-                    } else {
-                        ingr = new RecipeChoice.MaterialChoice(Material.valueOf(Ingredient));
-                    }
-
-
-                    if(config.getInt("Recipes." + recipe + ".Ingredients." + Ingredient) == 1) {
-                        newShapelessRecipe.addIngredient(ingr);
-                    } else if (config.getInt("Recipes." + recipe + ".Ingredients." + Ingredient) > 1) {
-                        for (int i = 1; i == config.getInt("Recipes." + recipe + ".Ingredients." + Ingredient); i++) {
+                    try {
+                      if (checkCustomIngredient(Ingredient)) {
+                            ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(Ingredient.substring(4)));
+                      } else {
+                            ingr = new RecipeChoice.MaterialChoice(Material.valueOf(Ingredient));
+                       }
+                        if(config.getInt("Recipes." + recipe + ".Ingredients." + Ingredient) == 1) {
                             newShapelessRecipe.addIngredient(ingr);
+                        } else if (config.getInt("Recipes." + recipe + ".Ingredients." + Ingredient) > 1) {
+                            for (int i = 1; i == config.getInt("Recipes." + recipe + ".Ingredients." + Ingredient); i++) {
+                                newShapelessRecipe.addIngredient(ingr);
+                            }
                         }
+                    } catch (NullPointerException er) {
+                        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Error! Ingredient " + config.getString("Recipes." + recipe + ".Recipe.Ingredient") + " may not be a valid ingredient!");
+                        er.printStackTrace();
                     }
+
+
+
                 });
                 plugin.getServer().addRecipe(newShapelessRecipe);
             }

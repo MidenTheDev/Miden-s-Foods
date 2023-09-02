@@ -20,17 +20,24 @@ public class CoreTabCompleter implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-        baseCommands.add("reload"); baseCommands.add("give"); baseCommands.add("create");
         config = plugin.getConfig();
-        config.getConfigurationSection("Recipes").getKeys(false).forEach(recipe -> {
-            foodlist.add(recipe);
-        });
+        foodlist.clear();
         if(sender instanceof Player){
         if(cmd.getName().equalsIgnoreCase("cf")) {
-            if (args.length==1) {
-                return baseCommands;
-            } else {
 
+            if (args.length==1) {
+                baseCommands.add("reload"); baseCommands.add("give"); baseCommands.add("create");
+
+                return baseCommands;
+            } else if (args.length==2 && args[0].equalsIgnoreCase("give")){
+                config.getConfigurationSection("Recipes").getKeys(false).forEach(recipe -> {
+                    if (args[1].length()<=0) {
+                        foodlist.add(recipe);
+                    } else if (recipe.toLowerCase().contains(args[1].toLowerCase())) {
+                        foodlist.add(recipe);
+                    }
+
+                });
                 return foodlist;
             }
         }

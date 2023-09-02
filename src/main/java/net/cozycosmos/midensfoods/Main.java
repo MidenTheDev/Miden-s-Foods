@@ -15,8 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.cozycosmos.midensfoods.items.LegacyFoodCreator;
-
 import java.io.File;
 
 
@@ -101,24 +99,15 @@ public class Main extends JavaPlugin{
 	public void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 
-		if(getConfig().getBoolean("LegacySystem") || Bukkit.getVersion().contains("1.13")) {
-			pm.registerEvents(new LegacyFoodCreator(), this);
-			cs.sendMessage(ChatColor.GRAY +"[MidensFoods] "+ChatColor.GREEN + "Legacy food system enabled!");
-			cs.sendMessage(ChatColor.GRAY +"[MidensFoods] "+ChatColor.GREEN + "The modern ID system is incompatible with versions under 1.14!");
-		}else {
-			pm.registerEvents(new IdFoodCreator(), this);
-		}
+
+		pm.registerEvents(new IdFoodCreator(), this);
+
 		pm.registerEvents(new FoodEaten(), this);
 	}
 	public void registerRecipes() {
-		if(getConfig().getBoolean("LegacySystem") || Bukkit.getVersion().contains("1.13")){
+		IdFoodCreator recipe = new IdFoodCreator();
+		recipe.ItemRecipe();
 
-			LegacyFoodCreator recipe = new LegacyFoodCreator();
-			recipe.ItemRecipe();
-		} else {
-			IdFoodCreator recipe = new IdFoodCreator();
-			recipe.ItemRecipe();
-		}
 
 
 
@@ -134,7 +123,6 @@ public class Main extends JavaPlugin{
 
 	}
 	public void unloadEvents() {
-		HandlerList.unregisterAll(new LegacyFoodCreator());
 		HandlerList.unregisterAll(new IdFoodCreator());
 
 
