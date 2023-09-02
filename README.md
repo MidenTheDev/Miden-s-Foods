@@ -3,7 +3,7 @@
 <p>My plugin, Miden's Foods (also referred to as Custom Foods) was made with one particular goal in mind: to add proper custom fooditems to the game which the player actually goes through the eating animation to eat.
   
   
-With time, the plugin has evolved and changed, now supporting custom item textures, all kinds of recipes, all versions 1.13+, and even an API for developers to add their own features relating to custom foods without having to modify the plugin itself. 
+With time, the plugin has evolved and changed, now supporting custom item textures, all kinds of recipes, all versions 1.14+, and even an API for developers to add their own features relating to custom foods without having to modify the plugin itself. 
   
   
 Here, you will find the newest releases, experimental versions, a wiki, API documentation, and much more.\n\n
