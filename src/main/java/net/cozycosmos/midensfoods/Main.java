@@ -38,11 +38,10 @@ public class Main extends JavaPlugin{
 		pm = Bukkit.getServer().getPluginManager();
 		cs = Bukkit.getServer().getConsoleSender();
 
+		this.saveDefaultConfig();
+		super.reloadConfig();
+		this.getConfig().options().copyDefaults(true);
 
-		if(!getDataFolder().exists()) {
-			getDataFolder().mkdirs();
-			cs.sendMessage(ChatColor.GRAY +"[MidensFoods] "+ChatColor.GREEN+ "If this is your first time using the plugin, you may have to reload the plugin to get it to work properly! (/cf reload)");
-		}
 		int pluginId = 12329; // <-- Replace with the id of your plugin!
 		Metrics metrics = new Metrics(this, pluginId);
 
@@ -76,9 +75,6 @@ public class Main extends JavaPlugin{
 
 		ItemStack recipeItemstack = new ItemStack(Material.REDSTONE);
 
-
-		getConfig().options().copyDefaults();
-		saveDefaultConfig();
 		registerRecipes();
 		registerEvents();
 		registerCommands();
