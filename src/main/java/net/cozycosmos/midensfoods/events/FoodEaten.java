@@ -2,7 +2,9 @@ package net.cozycosmos.midensfoods.events;
 
 import net.cozycosmos.midensfoods.Main;
 import net.cozycosmos.midensfoods.api.CustomFoodEatenEvent;
+import net.cozycosmos.midensfoods.util.VanillaFood;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -16,10 +18,7 @@ import java.util.List;
 public class FoodEaten implements Listener {
 
     private final Main plugin = Main.getPlugin(Main.class);
-    File foodValues = new File(Bukkit.getServer().getPluginManager().getPlugin("MidensFoods").getDataFolder(), "foodvalues.yml");
-    FileConfiguration foodvaluesyml = YamlConfiguration.loadConfiguration(foodValues);
-    File satValues = new File(Bukkit.getServer().getPluginManager().getPlugin("MidensFoods").getDataFolder(), "satvalues.yml");
-    FileConfiguration satvaluesyml = YamlConfiguration.loadConfiguration(satValues);
+
 
     @EventHandler
     public void FoodEaten (CustomFoodEatenEvent e) {
@@ -27,33 +26,42 @@ public class FoodEaten implements Listener {
         List<PotionEffect> effects = e.getEffects();
         List<String> commands = e.getCommands();
 
-        int foodlevel = p.getFoodLevel();
-        float satlevel = p.getSaturation();
-        foodlevel += e.getHungerFill();
-        foodlevel -= foodvaluesyml.getInt(e.getFoodBase().toString());
-        satlevel += e.getSaturationFill();
-        satlevel -= satvaluesyml.getDouble(e.getFoodBase().toString());
+        int foodlevel= p.getFoodLevel();
+        float satlevel= p.getSaturation();
 
-        p.setFoodLevel(foodlevel);
-        p.setSaturation(satlevel);
+         e.getOriginalEvent().setCancelled(true);
+         foodlevel += e.getHungerFill();
+         satlevel += e.getSaturationFill();
 
-        if(effects.equals(null)) {
-            //do nothing
-        } else {
-            effects.forEach(effect -> {
-                p.addPotionEffect(effect);
-            });
+
+
+
+        if (foodlevel < 0) {
+            foodlevel = 0;
         }
-
-        if (commands.equals(null)) {
-            //do nothing
-        } else {
-            commands.forEach(cmd -> {
-                String finalCmd = cmd.replace("%player%", e.getPlayer().getName());
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd);
-            });
-
+        if (satlevel < 0) {
+            satlevel = 0;
         }
+            p.setFoodLevel(foodlevel);
+            p.setSaturation(satlevel);
+
+            if(effects.equals(null)) {
+            //do nothing
+            } else {
+                effects.forEach(effect -> {
+                    p.addPotionEffect(effect);
+                });
+            }
+
+            if (commands.equals(null)) {
+                //do nothing
+            } else {
+                commands.forEach(cmd -> {
+                    String finalCmd = cmd.replace("%player%", e.getPlayer().getName());
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd);
+                });
+
+            }
 
 
     }

@@ -25,8 +25,7 @@ public class Main extends JavaPlugin{
 	public PluginManager pm;
 	public ConsoleCommandSender cs;
 
-	File foodvaluesYml = new File(getDataFolder()+"/foodvalues.yml");
-	File satvaluesYml = new File(getDataFolder()+"/satvalues.yml");
+
 	File messagesYml = new File(getDataFolder()+"/messages.yml");
 
 
@@ -42,7 +41,7 @@ public class Main extends JavaPlugin{
 		super.reloadConfig();
 		this.getConfig().options().copyDefaults(true);
 
-		int pluginId = 12329; // <-- Replace with the id of your plugin!
+		int pluginId = 12329;
 		Metrics metrics = new Metrics(this, pluginId);
 
 
@@ -56,16 +55,7 @@ public class Main extends JavaPlugin{
 			}
 		});
 
-		if(!foodvaluesYml.exists()){
-			this.saveResource("foodvalues.yml", false);
-		}else{
-			// do nothing
-		}
-		if(!satvaluesYml.exists()){
-			this.saveResource("satvalues.yml", false);
-		}else{
-			// do nothing
-		}
+
 		if(!messagesYml.exists()){
 			this.saveResource("messages.yml", false);
 		}else{
@@ -80,7 +70,6 @@ public class Main extends JavaPlugin{
 		registerCommands();
 
 		cs.sendMessage(ChatColor.GRAY +"[MidensFoods] "+ChatColor.GREEN + "Miden's Foods Enabled");
-		cs.sendMessage(ChatColor.GRAY +"[MidensFoods] "+ChatColor.GREEN + "This plugin is still in Beta! Expect Bugs!");
 
 
 

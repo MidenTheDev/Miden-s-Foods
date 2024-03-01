@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -17,7 +18,7 @@ public class CallCustomFoodEaten {
     private static final Main plugin = Main.getPlugin(Main.class);
     private static final FileConfiguration config = plugin.getConfig();
 
-    public static void CallEvent(String food, Player p) {
+    public static void CallEvent(String food, Player p, FoodLevelChangeEvent event) {
         List<PotionEffect> effects = new ArrayList<PotionEffect>();
 
         if(config.getConfigurationSection("Recipes." + food +".Effects") == null) {
@@ -39,7 +40,7 @@ public class CallCustomFoodEaten {
         }
 
 
-        CustomFoodEatenEvent foodEvent = new CustomFoodEatenEvent(p,config.getInt("Recipes." + food + ".Id"),config.getString("Recipes." + food + ".Name"),food,config.getInt("Recipes." + food + ".Hunger-Fill"),config.getDouble("Recipes." + food + ".Saturation"), Material.valueOf(config.getString("Recipes." + food + ".Base")),false,effects,cmds);
+        CustomFoodEatenEvent foodEvent = new CustomFoodEatenEvent(p,config.getInt("Recipes." + food + ".Id"),config.getString("Recipes." + food + ".Name"),food,config.getInt("Recipes." + food + ".Hunger-Fill"),config.getDouble("Recipes." + food + ".Saturation"), Material.valueOf(config.getString("Recipes." + food + ".Base")),false,effects,cmds,event);
         Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getServer().getPluginManager().callEvent(foodEvent));
 
     }

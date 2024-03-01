@@ -1,6 +1,7 @@
 package net.cozycosmos.midensfoods.commands;
 
 import net.cozycosmos.midensfoods.Main;
+import net.cozycosmos.midensfoods.util.VanillaFood;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -11,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.List;
 
 public class Create {
     private Main plugin = Main.getPlugin(Main.class);
@@ -23,10 +25,8 @@ public class Create {
 
     FileConfiguration config = plugin.getConfig();  //Accessing the config file
 
-    File foodValues = new File(Bukkit.getServer().getPluginManager().getPlugin("MidensFoods").getDataFolder(), "foodvalues.yml");
-    FileConfiguration foodvaluesyml = YamlConfiguration.loadConfiguration(foodValues);
-    File satValues = new File(Bukkit.getServer().getPluginManager().getPlugin("MidensFoods").getDataFolder(), "satvalues.yml");
-    FileConfiguration satvaluesyml = YamlConfiguration.loadConfiguration(satValues);
+
+
 
     File messages = new File(Bukkit.getServer().getPluginManager().getPlugin("MidensFoods").getDataFolder(), "messages.yml");
     FileConfiguration messagesyml = YamlConfiguration.loadConfiguration(messages);
@@ -34,8 +34,9 @@ public class Create {
     public void runCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         config = plugin.getConfig();
         Player p = (Player) sender;
-        foodvaluesyml.getConfigurationSection("").getKeys(false).forEach(food -> {
-            if(p.getInventory().getItemInMainHand().getType().equals(Material.getMaterial(food))) {
+        List<VanillaFood> foods = List.of(VanillaFood.values());
+        List.of(VanillaFood.values()).forEach(food -> {
+            if(p.getInventory().getItemInMainHand().getType().equals(Material.getMaterial(food.toString()))) {
                 isfood = true;
                 if (args.length >= 2) {
                     try {

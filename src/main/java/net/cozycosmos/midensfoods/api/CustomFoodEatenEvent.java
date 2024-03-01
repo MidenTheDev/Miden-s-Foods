@@ -4,6 +4,7 @@ import net.cozycosmos.midensfoods.Main;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.potion.PotionEffect;
 
@@ -23,9 +24,10 @@ public class CustomFoodEatenEvent extends PlayerEvent {
     private List<String> commands;
     Material base;
     private boolean legacy;
+    FoodLevelChangeEvent originalEvent;
 
 
-    public CustomFoodEatenEvent(Player player, int foodid, String FoodName, String FoodConfigName, int HungerFill, double SatFill, Material Base, boolean Legacy, List<PotionEffect> Effects, List<String> Commands) {
+    public CustomFoodEatenEvent(Player player, int foodid, String FoodName, String FoodConfigName, int HungerFill, double SatFill, Material Base, boolean Legacy, List<PotionEffect> Effects, List<String> Commands, FoodLevelChangeEvent OriginalEvent) {
         super(player);
         foodID = foodid;
         foodName = FoodName;
@@ -36,6 +38,7 @@ public class CustomFoodEatenEvent extends PlayerEvent {
         legacy = Legacy;
         effects = Effects;
         commands = Commands;
+        originalEvent = OriginalEvent;
     }
 
 
@@ -58,4 +61,5 @@ public class CustomFoodEatenEvent extends PlayerEvent {
     public List<String> getCommands() {return commands;}
     public Material getFoodBase() {return base;}
     public boolean isLegacyFood() {return legacy;}
+    public FoodLevelChangeEvent getOriginalEvent() {return originalEvent;}
 }

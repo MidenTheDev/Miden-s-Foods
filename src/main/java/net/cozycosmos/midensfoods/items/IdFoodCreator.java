@@ -164,21 +164,27 @@ public class IdFoodCreator implements Listener {
             else if(config.getString("Recipes." + recipe + ".Recipe-Type").equalsIgnoreCase("Shapeless")) {
                 NamespacedKey Key = new NamespacedKey(plugin, recipe);
                 ShapelessRecipe newShapelessRecipe = new ShapelessRecipe(Key, foodItem);
+
                 config.getConfigurationSection("Recipes." + recipe + ".Recipe.Ingredients").getKeys(false).forEach(Ingredient -> {
                     RecipeChoice ingr;
                     try {
+
                       if (checkCustomIngredient(Ingredient)) {
+
                             ingr = new RecipeChoice.ExactChoice(GenerateFoodItemstack.withID(Ingredient.substring(4)));
                       } else {
+
                             ingr = new RecipeChoice.MaterialChoice(Material.valueOf(Ingredient));
                        }
-                        if(config.getInt("Recipes." + recipe + ".Ingredients." + Ingredient) == 1) {
+
+                        if(config.getInt("Recipes." + recipe + ".Recipe.Ingredients." + Ingredient) == 1) {
                             newShapelessRecipe.addIngredient(ingr);
-                        } else if (config.getInt("Recipes." + recipe + ".Ingredients." + Ingredient) > 1) {
-                            for (int i = 1; i == config.getInt("Recipes." + recipe + ".Ingredients." + Ingredient); i++) {
+                        } else if (config.getInt("Recipes." + recipe + ".Recipe.Ingredients." + Ingredient) > 1) {
+                            for (int i = 1; i <= config.getInt("Recipes." + recipe + ".Recipe.Ingredients." + Ingredient); i++) {
                                 newShapelessRecipe.addIngredient(ingr);
                             }
                         }
+
                     } catch (NullPointerException er) {
                         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Error! Ingredient " + config.getString("Recipes." + recipe + ".Recipe.Ingredient") + " may not be a valid ingredient!");
                         er.printStackTrace();
@@ -209,7 +215,7 @@ public class IdFoodCreator implements Listener {
                         if(event.getItem().getItemMeta().getCustomModelData() == config.getInt("Recipes." + food + ".Id")){
 
 
-                            CallCustomFoodEaten.CallEvent(food,p);
+                            CallCustomFoodEaten.CallEvent(food,p,event);
                             return;
 
 

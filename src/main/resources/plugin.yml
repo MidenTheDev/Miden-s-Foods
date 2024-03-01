@@ -1,5 +1,5 @@
 name: MidensFoods
-version: 1.0
+version: '${project.version}'
 author: Miden
 main: net.cozycosmos.midensfoods.Main
 api-version: 1.14
